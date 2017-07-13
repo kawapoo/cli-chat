@@ -126,10 +126,6 @@ int main(){
 	check_error(bind(sockfd, (struct sockaddr *)&serv_addr, sizeof(struct sockaddr_in)));
 	check_error(listen(sockfd, 10));
 
-	//select()準備
-	sltime.tv_sec = 0;
-	sltime.tv_usec = 0;
-
 	//Control + Cが入力された場合、全クライアントへSERVER_ENDコマンドを送信する
 	//これ以外での強制終了時も設定するべきだが、今回はControl + Cでのみ強制終了させられるとして、省略する
 	if(signal(SIGINT, send_serverend) == SIG_ERR){
@@ -153,6 +149,10 @@ int main(){
 				if(maxfd < clients[i].sockfd) maxfd = clients[i].sockfd;
 			}
 		}
+
+		//select()準備
+		sltime.tv_sec = 10;
+		sltime.tv_usec = 0;
 
 		check_error(select(maxfd + 1, &sl, NULL, NULL, &sltime));
 

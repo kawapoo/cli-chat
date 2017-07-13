@@ -76,10 +76,6 @@ int main(){
 
 	check_error(connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(struct sockaddr_in)));
 
-	//select()準備
-	sltime.tv_sec = 0;
-	sltime.tv_usec = 0;
-
 	//名前設定
 	printf("\x1b[1m名前-> \x1b[0m");
 	scanf("%s", name);
@@ -91,6 +87,10 @@ int main(){
 		FD_ZERO(&sl);
 		FD_SET(sockfd, &sl);
 		FD_SET(0, &sl);	//stdin == 0
+
+		//select()準備
+		sltime.tv_sec = 10;
+		sltime.tv_usec = 0;
 
 		check_error(select(sockfd + 1, &sl, NULL, NULL, &sltime));
 
