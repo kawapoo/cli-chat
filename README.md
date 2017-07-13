@@ -13,9 +13,9 @@ Just compile.
 
 ## Usage
 1. Check the IP address of your server machine.  
-2. Start server on the server machine.  
+2. Start server on a server machine.  
 3. Start client on client machines.  
-4. Enter the IP address of the server machine.  
+4. Enter the IP address of the server.  
 5. Enter your name.  
 6. You can start chat.
 
