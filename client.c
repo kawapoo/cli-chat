@@ -54,7 +54,7 @@ void check_error(int val){
  */
 int main(){
 	struct sockaddr_in serv_addr;	//サーバデータ
-	int sockfd;	//ソケット通信に使用するソケットのディスクリプタ
+	int sockfd, i;	//sockfd:ソケット通信に使用するソケットのディスクリプタ, i:カウンタ
 	char sbuff[MAX_SIZE], kbuff[MAX_SIZE], name[50], serverIP[20];
 	//buff:送受信データ name:使用する名前 serverIP:接続するサーバのIPアドレス
 	struct timeval sltime;	//select()待ち時間
@@ -114,12 +114,15 @@ int main(){
 		}
 
 		if(FD_ISSET(0, &sl)){	//キーボードに読み込み可能データがある場合
-			scanf("%s", kbuff);
-			/*
-				本来であれば、fflush()やlseek()などを用いてキーボードの入力をリセット（ストリームのカーソルを設定）しつつ、キーボードからread()するべきである。
-				しかし、実験環境ではfflush()やlseek()が正常に動作せず、正常にread()が行えなかったため、ここではscanf()を用いて、入力を受け付けている。
-			*/
-			check_error(write(sockfd, kbuff, MAX_SIZE));
+			fgets(kbuff, MAX_SIZE, stdin);
+			if(strcmp(kbuff, "\n") != 0){
+				for(i = 0; i < MAX_SIZE && kbuff[i] != '\0'; i++) if(kbuff[i] == '\n') kbuff[i] = '\0';
+				/*
+					本来であれば、fflush()やlseek()などを用いてキーボードの入力をリセット（ストリームのカーソルを設定）しつつ、キーボードからread()するべきである。
+					しかし、実験環境ではfflush()やlseek()が正常に動作せず、正常にread()が行えなかったため、ここではscanf()を用いて、入力を受け付けている。
+				*/
+				check_error(write(sockfd, kbuff, MAX_SIZE));
+			}
 		}
 	}
 
